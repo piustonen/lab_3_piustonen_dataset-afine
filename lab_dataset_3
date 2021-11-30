@@ -1,0 +1,23 @@
+from PIL import Image
+import math
+
+FILENAME = "DS4.txt"
+VARIANT = 4
+CANVAS_SIZE = 960, 960
+WHITE = 255, 255, 255
+BLUE = 0, 0, 255
+ANGLE = 10*(VARIANT+1)*math.pi / 180
+
+with open(FILENAME) as file:
+    coordinates = file.readlines()
+    for i in range (0, len(coordinates)):
+        line = coordinates[i]
+        numbers_read = line.split(" ")
+        x = 480 + (int(numbers_read[0]) - 480) * math.cos(ANGLE) - (int(numbers_read[1]) - 480) * math.sin(ANGLE)
+        y = 480 + (int(numbers_read[0]) - 480) * math.sin(ANGLE) + (int(numbers_read[1]) - 480) * math.cos(ANGLE)
+        coordinates[i] = (int(round(x, 0)), int(round(y, 0)))
+
+img = Image.new('RGB', (CANVAS_SIZE), color = (WHITE))
+for pair in coordinates:
+    img.putpixel((pair[0], pair[1]), (BLUE))
+img.save('result.png')
